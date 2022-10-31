@@ -1,0 +1,92 @@
+openapi: 3.0.1
+info:
+  title: Offside gaming test service API
+  description: Offside gaming test service API
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+
+tags:
+  - name: GasWaterUsageMonitoring
+    description: operation about gas & water usage monitoring
+
+paths:
+  /api/v1/send_metrics:
+    post:
+      summary: Send current metrics
+      operationId: sendCurrentMetrics
+      tags:
+        - GasWaterUsageMonitoring
+      requestBody:
+        required: true
+        description: Request for sending current metrics
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserMetrics'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendingResult'
+
+  /api/v1/get_metrics_history/{id}:
+    get:
+      summary: Get metrics history by id
+      operationId: getMetricsHistoryById
+      tags:
+        - GasWaterUsageMonitoring
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of user
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserMetrics'
+
+components:
+  schemas:
+    UserMetrics:
+      type: object
+      description: user's metrics of gas and water
+      properties:
+        userId:
+          description: id of user
+          type: string
+        gasMetric:
+          description: metric of gas
+          type: number
+          format: double
+        hotWaterMetric:
+          description: metric of hot water
+          type: number
+          format: double
+        coldWaterMetric:
+          description: metric of cold water
+          type: number
+          format: double
+        dateOfMetric:
+          description: date of metrics
+          type: string
+          format: instant
+
+    SendingResult:
+      type: object
+      description: result of sending metrics
+      properties:
+        result:
+          type: boolean
+          default: false
+        errorMessage:
+          type: string
