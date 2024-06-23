@@ -51,4 +51,5 @@ public class UserMetric {
     @CreatedDate
     @Column(name = "date_of_metric")
     private Date dateOfMetric;
+    
 }
